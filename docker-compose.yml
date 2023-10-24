@@ -1,0 +1,221 @@
+version: '3.9'
+services:
+
+  webserver:
+    image: nginx:alpine
+    restart: unless-stopped
+    tty: true
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ./apps/blog/:/var/www/blog
+      - ./apps/api_gateway/:/var/www/api_gateway
+      - ./apps/ms_posts/:/var/www/ms_posts
+      - ./apps/ms_categories/:/var/www/ms_categories
+      - ./apps/ms_tags/:/var/www/ms_tags
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./docker/nginx/sites/:/etc/nginx/conf.d/
+      - ./docker/nginx/ssl/:/etc/ssl/
+    networks:
+      - app-network
+
+  blog:
+    build:
+      context: apps/blog
+      dockerfile: Dockerfile
+    image: digitalocean.com/php
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: blog
+      SERVICE_TAGS: dev
+    working_dir: /var/www/blog
+    volumes:
+      - ./apps/blog/:/var/www/blog
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - app-network
+    depends_on:
+      - webserver
+
+  api_gateway:
+    build:
+      context: apps/api_gateway
+      dockerfile: Dockerfile
+    image: digitalocean.com/php
+    restart: unless-stopped
+    tty: true
+    links:
+      - api_gateway_db
+    environment:
+      SERVICE_NAME: api_gateway
+      SERVICE_TAGS: dev
+    working_dir: /var/www/api_gateway
+    volumes:
+      - ./apps/api_gateway/:/var/www/api_gateway
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - app-network
+    depends_on:
+      - webserver
+
+  ms_posts:
+    build:
+      context: apps/ms_posts
+      dockerfile: Dockerfile
+    image: digitalocean.com/php
+    restart: unless-stopped
+    tty: true
+    links:
+      - ms_posts_db
+    environment:
+      SERVICE_NAME: ms_posts
+      SERVICE_TAGS: dev
+    working_dir: /var/www/ms_posts
+    volumes:
+      - ./apps/ms_posts/:/var/www/ms_posts
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - app-network
+    depends_on:
+      - api_gateway
+
+  ms_categories:
+    build:
+      context: apps/ms_categories
+      dockerfile: Dockerfile
+    image: digitalocean.com/php
+    restart: unless-stopped
+    tty: true
+    links:
+      - ms_categories_db
+    environment:
+      SERVICE_NAME: ms_categories
+      SERVICE_TAGS: dev
+    working_dir: /var/www/ms_categories
+    volumes:
+      - ./apps/ms_categories/:/var/www/ms_categories
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - app-network
+    depends_on:
+      - api_gateway
+
+  ms_tags:
+    build:
+      context: apps/ms_tags
+      dockerfile: Dockerfile
+    image: digitalocean.com/php
+    restart: unless-stopped
+    tty: true
+    links:
+      - ms_tags_db
+    environment:
+      SERVICE_NAME: ms_tags
+      SERVICE_TAGS: dev
+    working_dir: /var/www/ms_tags
+    volumes:
+      - ./apps/ms_tags/:/var/www/ms_tags
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - app-network
+    depends_on:
+      - api_gateway
+
+  api_gateway_db:
+    container_name: api_gateway_db
+    image: mysql:latest
+    restart: unless-stopped
+    tty: true
+    ports:
+      - '3306:3306'
+    volumes:
+      - ./docker/mysql/data/dbdata_gateway:/docker-entrypoint-initdb.d
+      - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: api_gateway_db
+      SERVICE_NAME: mysql
+      SERVICE_TAGS: dev
+    networks:
+      - app-network
+
+  ms_posts_db:
+    container_name: ms_posts_db
+    image: mysql:latest
+    restart: unless-stopped
+    tty: true
+    ports:
+      - '3307:3306'
+    volumes:
+      - ./docker/mysql/data/dbdata_posts:/docker-entrypoint-initdb.d
+      - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ms_posts_db
+      SERVICE_NAME: mysql
+      SERVICE_TAGS: dev
+    networks:
+      - app-network
+
+  ms_categories_db:
+    container_name: ms_categories_db
+    image: mysql:latest
+    restart: unless-stopped
+    tty: true
+    ports:
+      - '3308:3306'
+    volumes:
+      - ./docker/mysql/data/dbdata_categories:/docker-entrypoint-initdb.d
+      - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ms_categories_db
+      SERVICE_NAME: mysql
+      SERVICE_TAGS: dev
+    networks:
+      - app-network
+
+  ms_tags_db:
+    container_name: ms_tags_db
+    image: mysql:latest
+    restart: unless-stopped
+    tty: true
+    ports:
+      - '3309:3306'
+    volumes:
+      - ./docker/mysql/data/dbdata_tags:/docker-entrypoint-initdb.d
+      - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ms_tags_db
+      SERVICE_NAME: mysql
+      SERVICE_TAGS: dev
+    networks:
+      - app-network
+  
+  redis:
+    image: 'redis:alpine'
+    command: redis-server --requirepass sOmE_sEcUrE_pAsS
+    ports:
+      - '6379:6379'
+    volumes:
+      - ./docker/redis/redis-data:/var/lib/redis
+      - ./docker/redis/redis.conf:/usr/local/etc/redis/redis.conf
+    environment:
+      - REDIS_REPLICATION_MODE=master
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  dbdata_gateway:
+    driver: local
+  dbdata_posts:
+    driver: local
+  dbdata_categories:
+    driver: local
+  dbdata_tags:
+    driver: local
