@@ -16,3 +16,13 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+$router->group(['prefix' => 'api/posts'], function () use ($router) {
+    //Commands
+    $router->post('/', 'PostController@store');
+    $router->patch('/{id}', 'PostController@update');
+    $router->delete('/{id}', 'PostController@delete');
+    //Queries
+    $router->get('/',  'PostController@get');
+    $router->get('/{id}',  'PostController@find');
+});
