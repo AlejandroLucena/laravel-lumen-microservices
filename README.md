@@ -105,8 +105,8 @@ Add additional notes about how to deploy this on a live system.
 
 ## ✍️ Authors <a name = "authors"></a>
 
-- [] (https://medium.com/@rlmc/laravel-microservice-communication-with-laravel-workflow-54a73088d03a) - Microservice Communication with Laravel Workflow 
-- [@kylelobo](https://tahirjan.com/) - Event-driven Development in Laravel
+- [@rlmc] (https://medium.com/@rlmc/laravel-microservice-communication-with-laravel-workflow-54a73088d03a) - Microservice Communication with Laravel Workflow 
+- [@tahirjan](https://tahirjan.com/) - Event-driven Development in Laravel
 
 See also the list of [contributors](https://github.com/kylelobo/The-Documentation-Compendium/contributors) who participated in this project.
 

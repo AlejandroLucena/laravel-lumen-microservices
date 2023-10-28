@@ -6,6 +6,7 @@
     "type": "project",
     "require": {
         "php": "^8.1",
+        "darkaonline/swagger-lume": "^10.1",
         "laravel/lumen-framework": "^10.0"
     },
     "require-dev": {
@@ -16,13 +17,14 @@
     "autoload": {
         "psr-4": {
             "App\\": "app/",
+            "Modules\\": "src/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/"
+            "UnitTest\\": "tests/Unit/"
         }
     },
     "scripts": {
@@ -36,5 +38,9 @@
         "sort-packages": true
     },
     "minimum-stability": "stable",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "tests": [
+        "@php ./vendor/bin/phpunit --migrate-configuration",
+        "@php ./vendor/bin/phpunit --no-coverage --stop-on-error --stop-on-failure --testsuite Unit"
+    ]
 }
