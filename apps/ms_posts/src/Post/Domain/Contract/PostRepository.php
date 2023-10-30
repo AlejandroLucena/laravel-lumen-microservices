@@ -16,6 +16,8 @@ interface PostRepository
     public function update(Post $post): void;
 
     public function find(IdValueObject $id): ?array;
+    
+    public function findOrFail(IdValueObject $id): ?array;
 
     public function findBySlug(SlugValueObject $slug): ?array;
 

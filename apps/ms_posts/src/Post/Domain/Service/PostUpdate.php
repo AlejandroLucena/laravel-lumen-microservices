@@ -27,8 +27,8 @@ final class PostUpdate
         ?PostContent $content,
         ?DateTimeValueObject $updatedAt
     ): void {
-        $resource = $this->postFinder->find($id);
-        
+        $resource = $this->ensureExists($id);
+
         $post = Post::fromPrimitives($resource);
 
         $post->update(
@@ -40,5 +40,12 @@ final class PostUpdate
         );
 
         $this->repository->update($post);
+    }
+
+    private function ensureExists(IdValueObject $id): ?array
+    {
+
+        return $this->postFinder->findOrFail($id);
+        
     }
 }

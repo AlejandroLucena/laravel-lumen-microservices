@@ -45,6 +45,13 @@ class PostTestCase extends TestCase
             ->andReturn($primitives);
     }
     
+    public function shouldNotFind(): void
+    {
+        $this->repository
+            ->shouldReceive('findOrFail')
+            ->andThrow(BadRequestException::class);
+    }
+    
     public function shouldFindOrFail(Post $post): void
     {
         $this->repository

@@ -40,4 +40,15 @@ final class PostFinder
 
         return $post;
     }
+
+    public function findOrFail(IdValueObject $id): array
+    {
+        $post = $this->repository->findOrFail($id);
+
+        if (! $post) {
+            throw NotFound::with($id);
+        }
+
+        return $post;
+    }
 }

@@ -9,6 +9,8 @@ use UnitTest\Post\PostTestCase;
 use Modules\Post\Domain\Service\PostFinder;
 use Modules\Post\Domain\Service\PostUpdate;
 use Modules\Post\Domain\Contract\PostRepository;
+use Modules\Post\Domain\Exception\NotFound;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use UnitTest\Post\Domain\ValueObject\PostTitleMother;
 use UnitTest\Post\Domain\ValueObject\PostContentMother;
 use UnitTest\Shared\Domain\ValueObject\IdValueObjectMother;
@@ -55,6 +57,28 @@ class PostUpdateTest extends PostTestCase
         $this->shouldFindOrFail($unit);
         $this->shouldFind($unit->toPrimitives());
         $this->shouldUpdateRepository();
+
+        $this->service->__invoke(
+            IdValueObjectMother::dummy(),
+            PostTitleMother::dummy(),
+            SlugValueObjectMother::dummy(),
+            PostContentMother::dummy(),
+            DateTimeValueObjectMother::dummy(),
+        );
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldUpdatePostKo(): void
+    {
+        $unit = PostMother::dummy();
+
+        $this->shouldFindOrFail($unit);
+        $this->shouldNotFind();
+
+        $this->expectException(BadRequestException::class);
 
         $this->service->__invoke(
             IdValueObjectMother::dummy(),
