@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\Post\Application\Command\Update;
 
-use Modules\Post\Domain\Service\PostUpdate;
+use Modules\Post\Domain\Service\PostUpdater;
 use Modules\Post\Domain\ValueObject\PostContent;
 use Modules\Post\Domain\ValueObject\PostTitle;
 use Illuminate\Support\Str;
@@ -18,7 +18,7 @@ use Modules\Shared\Domain\ValueObject\SlugValueObject;
 class UpdatePostCommandHandler
 {
     public function __construct(
-        private readonly PostUpdate $postUpdate,
+        private readonly PostUpdater $postUpdater,
     ) {
     }
 
@@ -29,7 +29,7 @@ class UpdatePostCommandHandler
         UpdatePostCommand $command
     ): void {
 
-        $this->postUpdate->__invoke(
+        $this->postUpdater->__invoke(
             $command->id() ? IdValueObject::from($command->id()) : null,
             $command->title() ? PostTitle::from($command->title()) : null,
             $command->slug() ? SlugValueObject::from($command->slug()) : SlugValueObject::from(Str::slug($command->title())),

@@ -14,12 +14,13 @@ declare(strict_types=1);
 namespace Modules\Post\Domain\Exception;
 
 use Modules\Shared\Domain\ValueObject\IdValueObject;
+use Modules\Shared\Domain\ValueObject\SlugValueObject;
 use Symfony\Component\HttpFoundation\Response;
 
-final class AlreadyExists extends \InvalidArgumentException
+final class AlreadyExistsSlug extends \InvalidArgumentException
 {
-    public static function withUserId(IdValueObject $id): AlreadyExists
+    public static function with(SlugValueObject $slug): self
     {
-        return new self(\sprintf('Post with id %s already exists.', $id->value()), Response::HTTP_BAD_REQUEST);
+        return new self(\sprintf('Post with slug %s already exists.', $slug->value()), Response::HTTP_BAD_REQUEST);
     }
 }

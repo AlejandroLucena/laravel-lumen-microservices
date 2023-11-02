@@ -9,7 +9,7 @@ use Modules\Shared\Domain\Exception\InvalidValueException;
 
 class SlugValueObject extends StringValueObject
 {
-    public function __construct(private readonly string $value)
+    public function __construct(string $value)
     {
         $this->ensureIsValidSlug($value);
 
@@ -21,11 +21,6 @@ class SlugValueObject extends StringValueObject
         if (! preg_match('/^[a-z0-9][-a-z0-9]*$/', $value)) {
             throw new InvalidValueException(sprintf('The slug <%s> is not valid', $value));
         }
-    }
-
-    public function value(): string
-    {
-        return $this->value;
     }
 
     public static function from(string $value): self

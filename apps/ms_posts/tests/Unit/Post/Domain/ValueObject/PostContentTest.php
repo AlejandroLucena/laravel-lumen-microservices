@@ -14,7 +14,7 @@ class PostContentTest extends PostTestCase
      */
     public function shouldCreatePostContentOk(): void
     {
-        $paragraph = Factory::create()->paragraph;
+        $paragraph = Factory::create()->paragraph();
 
         $return = PostContent::from($paragraph);
 

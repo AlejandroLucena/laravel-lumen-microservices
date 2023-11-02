@@ -38,7 +38,6 @@ Write about 1-2 paragraphs describing the purpose of your project.
 
 ## 🏁 Getting Started <a name = "getting_started"></a>
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See [deployment](#deployment) for notes on how to deploy the project on a live system.
 
 ### Prerequisites
 
@@ -52,23 +51,25 @@ Give examples
 
 A step by step series of examples that tell you how to get a development env running.
 
-Say what the step will be
+To run services independently use these tags [ms_posts, ms_tags, ms_categories]
+```
+docker compose up -d <tag1, tag2, ...>
+```
 
-```
-Give the example
-```
-
-And repeat
-
-```
-until finished
-```
+PD: for fixing this issue "creating WAL folder at \"/wal\" "
+https://github.com/grafana/loki/issues/4704
 
 End with an example of getting some data out of the system or using it for a little demo.
 
 ## 🔧 Running the tests <a name = "tests"></a>
 
 Explain how to run the automated tests for this system.
+
+To run the tests choose service_id from this list [ ms_posts, ms_tags, ms_categories ]
+```
+make tests [service_id]
+```
+This will run PHPUnit over Unit folder of this MS
 
 ### Break down into end to end tests
 
@@ -107,6 +108,7 @@ Add additional notes about how to deploy this on a live system.
 
 - [@rlmc] (https://medium.com/@rlmc/laravel-microservice-communication-with-laravel-workflow-54a73088d03a) - Microservice Communication with Laravel Workflow 
 - [@tahirjan](https://tahirjan.com/) - Event-driven Development in Laravel
+- Graphana - https://yuriktech.com/2020/03/21/Collecting-Docker-Logs-With-Loki/ - https://www.youtube.com/watch?v=pnycjg_9M-o
 
 See also the list of [contributors](https://github.com/kylelobo/The-Documentation-Compendium/contributors) who participated in this project.
 

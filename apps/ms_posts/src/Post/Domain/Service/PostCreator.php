@@ -5,16 +5,18 @@ declare(strict_types=1);
 namespace Modules\Post\Domain\Service;
 
 use Modules\Post\Domain\Contract\PostRepository;
+use Modules\Post\Domain\Exception\AlreadyExists;
 use Modules\Post\Domain\Post;
 use Modules\Post\Domain\ValueObject\PostContent;
 use Modules\Post\Domain\ValueObject\PostTitle;
 use Modules\Shared\Domain\ValueObject\DateTimeValueObject;
 use Modules\Shared\Domain\ValueObject\SlugValueObject;
 
-final class CreatePost
+final class PostCreator
 {
     public function __construct(
-        private readonly PostRepository $repository,
+        private readonly PostRepository $postRepository,
+        private readonly PostFinder $postFinder
     ) {
     }
 
@@ -24,6 +26,9 @@ final class CreatePost
         PostContent $content,
         DateTimeValueObject $createdAt
     ): void {
+
+        $this->ensureDoesNotExistsSlug($slug);
+
         $post = new Post(
             null,
             $title,
@@ -32,6 +37,14 @@ final class CreatePost
             $createdAt
         );
 
-        $this->repository->save($post);
+        $this->postRepository->save($post);
+    }
+
+    private function ensureDoesNotExistsSlug(SlugValueObject $slug): void
+    {
+        $post = $this->postFinder->findBySlug($slug);
+        if ($post) {
+            throw new AlreadyExists("". $slug ."");
+        }
     }
 }

@@ -9,6 +9,7 @@ use Modules\Post\Domain\Contract\PostRepository;
 use Modules\Post\Domain\Post;
 use Exception;
 use Illuminate\Support\Facades\Cache;
+use Modules\Post\Domain\Exception\NotFound;
 use Modules\Post\Domain\Resource\PostResource;
 use Modules\Shared\Domain\Criteria\Criteria;
 use Modules\Shared\Domain\ValueObject\IdValueObject;
@@ -17,6 +18,7 @@ use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 final class EloquentPostRepository implements PostRepository
 {
+
     public function __construct(
         private readonly EloquentPostModel $eloquentPostModel
     ) {
@@ -73,8 +75,9 @@ final class EloquentPostRepository implements PostRepository
             }
             $post = Cache::get('post_' . $id);
 
-            if (!$post) {
-                return null;
+            if(!$post)
+            {
+                return [];
             }
             return PostResource::make($post)->resolve();
         } catch (Exception $e) {
@@ -92,7 +95,10 @@ final class EloquentPostRepository implements PostRepository
                 });
             }
             $post = Cache::get('post_' . $value);
-
+            if(!$post)
+            {
+                return [];
+            }
             return PostResource::make($post)->resolve();
         } catch (Exception $e) {
             throw new BadRequestException($e->getMessage());

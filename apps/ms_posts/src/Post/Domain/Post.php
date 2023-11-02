@@ -101,12 +101,24 @@ class Post
     public static function fromPrimitives(array $primitives): self
     {
         return new self(
-            IdValueObject::from($primitives['id']->value()),
-            PostTitle::from($primitives['title']->value()),
-            SlugValueObject::from($primitives['slug']->value()),
-            PostContent::from($primitives['content']->value()),
-            DateTimeValueObject::createFromString($primitives['created_at']->toIso8601Format()),
-            DateTimeValueObject::createFromString($primitives['updated_at']->toIso8601Format())
+            IdValueObject::from($primitives['id']),
+            PostTitle::from($primitives['title']),
+            SlugValueObject::from($primitives['slug']),
+            PostContent::from($primitives['content']),
+            DateTimeValueObject::createFromString($primitives['created_at']),
+            DateTimeValueObject::createFromString($primitives['updated_at'])
+        );
+    }
+
+    public static function fromValueObjects(array $valueObjects): self
+    {
+        return new self(
+            IdValueObject::from($valueObjects['id']->value()),
+            PostTitle::from($valueObjects['title']->value()),
+            SlugValueObject::from($valueObjects['slug']->value()),
+            PostContent::from($valueObjects['content']->value()),
+            DateTimeValueObject::createFromString($valueObjects['created_at']->toIso8601Format()),
+            DateTimeValueObject::createFromString($valueObjects['updated_at']->toIso8601Format())
         );
     }
 

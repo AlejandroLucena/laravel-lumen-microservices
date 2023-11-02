@@ -12,41 +12,47 @@ use Modules\Shared\Domain\ValueObject\SlugValueObject;
 final class PostFinder
 {
     public function __construct(
-        private readonly PostRepository $repository,
+        private readonly PostRepository $postRepository,
     ) {
     }
 
     public function findAll(): ?array
     {
-        $post = $this->repository->findAll();
+        $post = $this->postRepository->findAll();
 
         return $post;
     }
 
     public function find(IdValueObject $id): ?array
     {
-        $post = $this->repository->find($id);
+        $post = $this->postRepository->find($id);
 
         return $post;
     }
-
-    public function findBySlugOrFail(SlugValueObject $slug): array
+    
+    public function findOrFail(IdValueObject $id): array
     {
-        $post = $this->repository->FindBySlug($slug);
+        $post = $this->postRepository->find($id);
 
-        if (! $post) {
-            throw NotFound::withSlug($slug);
+        if (empty($post)) {     
+            throw NotFound::with($id);
         }
 
         return $post;
     }
 
-    public function findOrFail(IdValueObject $id): array
+    public function findBySlug(SlugValueObject $slug): ?array
     {
-        $post = $this->repository->findOrFail($id);
+        $post = $this->postRepository->findBySlug($slug);
+        return $post;
+    }
+
+    public function findBySlugOrFail(SlugValueObject $slug): array
+    {
+        $post = $this->postRepository->findBySlug($slug);
 
         if (! $post) {
-            throw NotFound::with($id);
+            throw NotFound::withSlug($slug);
         }
 
         return $post;
