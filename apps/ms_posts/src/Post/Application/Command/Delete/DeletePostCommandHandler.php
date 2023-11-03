@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\Post\Application\Command\Delete;
 
-use Modules\Post\Domain\Service\PostDelete;
+use Modules\Post\Domain\Service\PostRemover;
 use Modules\Shared\Domain\ValueObject\IdValueObject;
 
 /**
@@ -13,7 +13,7 @@ use Modules\Shared\Domain\ValueObject\IdValueObject;
 class DeletePostCommandHandler
 {
     public function __construct(
-        private readonly PostDelete $postDelete,
+        private readonly PostRemover $postRemover,
     ) {
     }
 
@@ -25,7 +25,7 @@ class DeletePostCommandHandler
     public function __invoke(
         DeletePostCommand $command
     ): void {
-        $this->postDelete->__invoke(
+        $this->postRemover->__invoke(
             IdValueObject::from($command->id()),
         );
     }

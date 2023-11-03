@@ -12,7 +12,7 @@ use Modules\Post\Domain\ValueObject\PostTitle;
 use Modules\Shared\Domain\ValueObject\DateTimeValueObject;
 use Modules\Shared\Domain\ValueObject\SlugValueObject;
 
-final class PostCreator
+class PostCreator
 {
     public function __construct(
         private readonly PostRepository $postRepository,

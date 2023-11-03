@@ -11,10 +11,9 @@ class UpdatePostCommand
 {
     public function __construct(
         private readonly int $id,
-        private readonly ?string $title,
-        private readonly ?string $slug,
-        private readonly ?int $postcategoryId,
-        private readonly ?string $content = null,
+        private readonly string $title,
+        private readonly string $slug,
+        private readonly string $content,
     ) {
     }
 
@@ -29,7 +28,7 @@ class UpdatePostCommand
     /**
      * Summary of title
      */
-    public function title(): ?string
+    public function title(): string
     {
         return $this->title;
     }
@@ -37,7 +36,7 @@ class UpdatePostCommand
     /**
      * Summary of slug
      */
-    public function slug(): ?string
+    public function slug(): string
     {
         return $this->slug;
     }
@@ -45,7 +44,7 @@ class UpdatePostCommand
     /**
      * Summary of content
      */
-    public function content(): ?string
+    public function content(): string
     {
         return $this->content;
     }

@@ -8,7 +8,7 @@ use Modules\Post\Domain\Contract\PostRepository;
 use Modules\Post\Domain\Exception\NotFound;
 use Modules\Shared\Domain\ValueObject\IdValueObject;
 
-final class PostDelete
+class PostRemover
 {
     public function __construct(
         private readonly PostRepository $repository,
@@ -28,7 +28,7 @@ final class PostDelete
     {
         $response = $this->repository->find($id);
 
-        if (! $response) {
+        if (! $response ) {
             throw NotFound::with($id);
         }
     }

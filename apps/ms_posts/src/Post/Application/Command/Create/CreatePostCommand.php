@@ -33,7 +33,7 @@ class CreatePostCommand extends Command
     /**
      * Summary of slug
      */
-    public function slug(): string
+    public function slug(): ?string
     {
         return $this->slug ? $this->slug : Str::slug($this->title);
     }

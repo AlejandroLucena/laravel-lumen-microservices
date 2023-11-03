@@ -20,14 +20,12 @@ class UpdatePostController extends Controller
     {
         $title = $request->input('title');
         $slug = $request->input('slug');
-        $postcategoryId = intval($request->input('postcategory'));
         $content = $request->input('content') ? $request->input('content') : '';
 
         $this->commandBus->dispatch(new UpdatePostCommand(
             $id,
             $title,
             $slug,
-            $postcategoryId,
             $content,
         ));
 

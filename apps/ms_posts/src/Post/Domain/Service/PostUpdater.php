@@ -15,7 +15,7 @@ use Modules\Shared\Domain\ValueObject\DateTimeValueObject;
 use Modules\Shared\Domain\ValueObject\IdValueObject;
 use Modules\Shared\Domain\ValueObject\SlugValueObject;
 
-final class PostUpdater
+class PostUpdater
 {
     public function __construct(
         private readonly PostRepository $postRepository,
