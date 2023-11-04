@@ -30,8 +30,7 @@ class PostController extends Controller
 
             return response()->json("Entity Created", Response::HTTP_CREATED);
         } catch (Exception $e) {
-
-            return response()->json($e->getMessage(), $e->getCode());
+            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -43,7 +42,7 @@ class PostController extends Controller
             return response()->json("Entity Updated", Response::HTTP_ACCEPTED);
         } catch (Exception $e) {
 
-            return response()->json($e->getMessage(), $e->getCode());
+            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
     public function delete(int $id)
@@ -54,7 +53,7 @@ class PostController extends Controller
             return response()->json("Entity Deleted", Response::HTTP_NO_CONTENT);
         } catch (Exception $e) {
 
-            return response()->json($e->getMessage(), $e->getCode());
+            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -66,7 +65,7 @@ class PostController extends Controller
             return response()->json($response, Response::HTTP_OK);
         } catch (Exception $e) {
 
-            return response()->json($e->getMessage(), $e->getCode());
+            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -78,7 +77,7 @@ class PostController extends Controller
             return response()->json($response, Response::HTTP_OK);
         } catch (Exception $e) {
 
-            return response()->json($e->getMessage(), $e->getCode());
+            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }
